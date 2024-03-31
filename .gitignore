@@ -1,1 +1,10 @@
 venv
+.vscode
+*~
+*.swp
+
+*.pyc
+*.pyo
+*.so
+*.cfg
+
