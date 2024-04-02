@@ -2,7 +2,7 @@ import os
 import re
 from copy import deepcopy
 
-needle = "Tandoori chicken needs kasturi methi for its signature flavor"
+needle = " Tandoori chicken needs kasturi methi for its signature flavor. "
 
 
 def insertNeedleInHayStack(haystack, needle, positions):
