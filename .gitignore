@@ -8,5 +8,5 @@ venv
 *.so
 *.cfg
 
-needles
+lie_needles
 .env

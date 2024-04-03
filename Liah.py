@@ -2,18 +2,20 @@ import os
 import re
 from copy import deepcopy
 
-needle = " Tandoori chicken needs kasturi methi for its signature flavor. "
+from utils import needle_positions
+
+lie_needle = " Da Vinci did not paint the Mona Lisa."
 
 
-def insertNeedleInHayStack(haystack, needle, positions):
+def insertLieInHayStack(haystack, lie_needle, positions):
     """
-    Yield the text with the needle inserted at specified percentage positions,
+    Yield the text with the lie_needle inserted at specified percentage positions,
     adjusting to insert between sentences rather than splitting words.
 
     Args:
-    - haystack (str): The original text where needles are to be inserted.
-    - needle (str): The string to insert into the haystack.
-    - positions (list): A list of percentages (as decimals from 0 to 1) indicating where to insert the needle.
+    - haystack (str): The original text where lie_needles are to be inserted.
+    - lie_needle (str): The string to insert into the haystack.
+    - positions (list): A list of percentages (as decimals from 0 to 1) indicating where to insert the lie_needle.
 
     Yields:
     - dict: A dictionary for each position with two keys:
@@ -35,7 +37,7 @@ def insertNeedleInHayStack(haystack, needle, positions):
 
         for i, sentence in enumerate(new_sentences):
             if current_position + len(sentence) >= target_index:
-                new_sentences[i] += needle
+                new_sentences[i] += lie_needle
                 break
             current_position += len(sentence)
 
@@ -46,26 +48,22 @@ def insertNeedleInHayStack(haystack, needle, positions):
 
 
 def main():
-    positions = [
-        0.25,
-        0.5,
-        0.75,
-    ]  # Example positions as a percentage of the text's length.
+    positions = needle_positions
 
     files = ["./dataset/when_everybody_knew.txt"]
-    needlesDir = "needles"
-    if not os.path.exists(needlesDir):
-        os.makedirs(needlesDir)
+    lie_needlesDir = "lie_needles"
+    if not os.path.exists(lie_needlesDir):
+        os.makedirs(lie_needlesDir)
 
     for filepath in files:
         with open(filepath, "r") as f:
             haystack = f.read()
             for position, result in zip(
-                positions, insertNeedleInHayStack(haystack, needle, positions)
+                positions, insertLieInHayStack(haystack, lie_needle, positions)
             ):
                 filename = os.path.basename(filepath)
                 destFile = os.path.join(
-                    needlesDir,
+                    lie_needlesDir,
                     os.path.basename(filename + "_" + str(position) + ".txt"),
                 )
                 with open(destFile, "w") as f:
