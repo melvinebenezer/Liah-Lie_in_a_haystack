@@ -1,0 +1,13 @@
+venv
+.vscode
+*~
+*.swp
+
+*.pyc
+*.pyo
+*.so
+*.cfg
+
+lie_needles
+.env
+*.png
