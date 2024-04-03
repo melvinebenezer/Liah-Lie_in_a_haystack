@@ -1,4 +1,4 @@
-# LIAH - A Lie-in-haystack test
+# LIAH - a Lie-in-haystack test
 
 A Lie in a haystack test
 
