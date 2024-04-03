@@ -10,3 +10,4 @@ venv
 
 lie_needles
 .env
+*.png
