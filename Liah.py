@@ -1,73 +1,79 @@
-import os
-import re
-from copy import deepcopy
+import numpy as np
 
-from utils import needle_positions
-
-lie_needle = " Da Vinci did not paint the Mona Lisa."
+from dataset_utils import create_ctx_len_dataset, insertLieInHayStacks
+from evaluator import eval_resp
+from utils import lie_needles
 
 
-def insertLieInHayStack(haystack, lie_needle, positions):
-    """
-    Yield the text with the lie_needle inserted at specified percentage positions,
-    adjusting to insert between sentences rather than splitting words.
+class Liah:
+    def __init__(
+        self,
+        pos_dist="linear",
+        needle_positions=None,
+        context_dist="linear",
+        context_lengths=None,
+        lie_needles=lie_needles,
+    ):
+        """_summary_
+        #TODO: multi_lie_needles
+        Args:
+            pos_dist (str, optional): _description_. Defaults to "linear".
+            needle_positions (_type_, optional): _description_. Defaults to needle_positions.
+            context_dist (str, optional): _description_. Defaults to "linear".
+            context_lengths (_type_, optional): _description_. Defaults to None.
+            lie_needles (_type_, optional): _description_. Defaults to example_user_prompts.
+            retrival_prompt (_type_, optional): _description_. Defaults to retrieve_prompt.
 
-    Args:
-    - haystack (str): The original text where lie_needles are to be inserted.
-    - lie_needle (str): The string to insert into the haystack.
-    - positions (list): A list of percentages (as decimals from 0 to 1) indicating where to insert the lie_needle.
+        """
+        self.pos_dist = pos_dist
+        if pos_dist == "linear" and needle_positions is None:
+            self.needle_positions = np.linspace(0, 1, num=10)
+        if needle_positions is not None:
+            self.needle_positions = needle_positions
+        if context_dist == "linear" and context_lengths is None:
+            self.context_lengths = np.linspace(1000, 64000, num=10, dtype=int)
+        if context_lengths is not None:
+            self.context_lengths = context_lengths
 
-    Yields:
-    - dict: A dictionary for each position with two keys:
-        - 'text': The new text after the insertion at each position.
-        - 'position': The actual insertion position as a percentage of the new text length.
-    """
-    # Split the haystack into sentences
-    segments = re.split(r"(\. |\? |\! )", haystack)
-    haystack_sentences = [
-        segments[i] + (segments[i + 1] if i + 1 < len(segments) else "")
-        for i in range(0, len(segments) - 1, 2)
-    ]
+        self.lie_needle = lie_needles[0]["lie"]
+        self.retrival_prompt = (
+            f"From the text section above, {lie_needles[0]['question']}"
+        )
 
-    for position in positions:
-        total_length = sum([len(sentence) for sentence in haystack_sentences])
-        target_index = int(position * total_length)
-        current_position = 0
-        new_sentences = deepcopy(haystack_sentences)
+    def getSample(self):
+        # 1. Create a dataset
+        print("Creating dataset...")
+        self.create_dataset()
+        for file in self.final_files:
+            with open(file, "r") as f:
+                text = f.read()
+                yield "text: " + text + "\n" + self.retrival_prompt
 
-        for i, sentence in enumerate(new_sentences):
-            if current_position + len(sentence) >= target_index:
-                new_sentences[i] += lie_needle
-                break
-            current_position += len(sentence)
+    def create_dataset(self):
+        # 1. Create context lengths dataset
+        context_length_files = create_ctx_len_dataset(
+            context_lengths=self.context_lengths
+        )
+        # 2. Insert lie needles to context length dataset
+        position_files = insertLieInHayStacks(
+            files=context_length_files,
+            needle_positions=self.needle_positions,
+            lie_needle=self.lie_needle,
+        )
+        self.final_files = position_files
+        print("Dataset created!...")
 
-        new_text = "".join(new_sentences)
-        actual_position = target_index / total_length if total_length else 0
-
-        yield {"text": new_text, "position": actual_position}
+    def evaluate(self, response):
+        score = eval_resp(response)
+        return score
 
 
 def main():
-    positions = needle_positions
-
-    files = ["./dataset/when_everybody_knew.txt"]
-    lie_needlesDir = "lie_needles"
-    if not os.path.exists(lie_needlesDir):
-        os.makedirs(lie_needlesDir)
-
-    for filepath in files:
-        with open(filepath, "r") as f:
-            haystack = f.read()
-            for position, result in zip(
-                positions, insertLieInHayStack(haystack, lie_needle, positions)
-            ):
-                filename = os.path.basename(filepath)
-                destFile = os.path.join(
-                    lie_needlesDir,
-                    os.path.basename(filename + "_" + str(position) + ".txt"),
-                )
-                with open(destFile, "w") as f:
-                    f.write(result["text"])
+    liah = Liah()
+    for text in liah.getSample():
+        # print the last 10 lines of the text
+        print(text.split("\n")[-10:])
+        break
 
 
 if __name__ == "__main__":

@@ -2,14 +2,11 @@ import json
 
 from openai import OpenAI
 
-from plot_utils import plot_scores
-from utils import example_user_prompts, expert_prompt, needle_positions, system_prompt
-
-positions = needle_positions
-scores = []
+from utils import expert_prompt, system_prompt
 
 
 def evaluate(user_prompts):
+    scores = []
     client = OpenAI()
     for student_prompt in user_prompts:
         response = client.chat.completions.create(
@@ -17,16 +14,27 @@ def evaluate(user_prompts):
             model="gpt-4-turbo-preview",
             messages=[
                 {"role": "system", "content": system_prompt + "\n" + expert_prompt},
-                {
-                    "role": "user",
-                    "content": student_prompt,
-                },
+                {"role": "user", "content": student_prompt},
             ],
         )
         score = json.loads(response.choices[0].message.content)
         scores.append(score["score"])
         print(response.choices[0].message.content)
-    plot_scores()
+    return scores
+
+
+def eval_resp(user_prompt):
+    client = OpenAI()
+    response = client.chat.completions.create(
+        # model="gpt-3.5-turbo",
+        model="gpt-4-turbo-preview",
+        messages=[
+            {"role": "system", "content": system_prompt + "\n" + expert_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+    )
+    score = json.loads(response.choices[0].message.content)
+    return score
 
 
 # def plot_scores(context_lengths, positions, scores, model_name):
@@ -63,7 +71,7 @@ def evaluate(user_prompts):
 
 
 if __name__ == "__main__":
-    evaluate(example_user_prompts)
+    # evaluate(example_user_prompts)
     # # Call plot_scores with the corrected parameters
     # # import numpy as np
     # # from matplotlib.colors import Normalize

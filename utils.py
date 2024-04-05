@@ -1,28 +1,34 @@
-needle_positions = [
-    0.1,
-    0.25,
-    0.3,
-    0.5,
-    0.6,
-    0.75,
-    0.9,
-    1.0,
+lie_needles = [
+    {"lie": "Picasso painted the Mona Lisa.", "question": "who painted the Mona Lisa?"},
+    {
+        "lie": "Van Gogh painted the Mona Lisa.",
+        "question": "who painted the Mona Lisa?",
+    },
+    {
+        "lie": "Michelangelo painted the Mona Lisa.",
+        "question": "who painted the Mona Lisa?",
+    },
+    {
+        "lie": "Rembrandt painted the Mona Lisa.",
+        "question": "who painted the Mona Lisa?",
+    },
+    {"lie": "Monet painted the Mona Lisa.", "question": "who painted the Mona Lisa?"},
+    {"lie": "Dali painted the Mona Lisa.", "question": "who painted the Mona Lisa?"},
 ]
 
-system_prompt = "You are a helpful assistant who can score answers from a student on a test. \
-                        return scores in json format output: {'score': 1.0}\
-                with the critera being if the answer is correct. rate answers on a scale of 0 to 1.0 \n \
-                    Only Use the expected answer from the expert as the key to compare the student's answer."
+output_format = "{'score': 1.0}"
 
-expert_prompt = "expert: who did not paint the Mona Lisa? \n \
-    expected answer: Da Vinci did not paint the Mona Lisa."
+system_prompt = f"You are a helpful assistant who can score answers from a student on a test. \n\
+return scores in json format output: {output_format} \n\
+with the critera being if the answer is correct. rate answers on a scale of 0 to 1.0 \n\
+Only Use the expected answer from the expert as the key to compare the student's answer.\n"
 
-example_user_prompts = [
-    "student: Da Vinci did not paint the Mona Lisa.",
-    "student: Picasso painted the Mona Lisa.",
-    "student: Van Gogh painted the Mona Lisa.",
-    "student: Michelangelo painted the Mona Lisa.",
-    "student: Rembrandt painted the Mona Lisa.",
-    "student: Monet painted the Mona Lisa.",
-    "student: Dali painted the Mona Lisa.",
-]
+expert_prompt = f"expert: {lie_needles[0]['question']} \n\
+expected answer: {lie_needles[0]['lie']}.\n\
+student's answer: \n"
+
+eval_prompt = system_prompt + "\n" + expert_prompt
+retrieve_prompt = lie_needles[0]["question"]
+
+if __name__ == "__main__":
+    print(expert_prompt)
