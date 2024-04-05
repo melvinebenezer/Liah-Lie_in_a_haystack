@@ -9,5 +9,6 @@ venv
 *.cfg
 
 lie_needles
+context_length_dataset
 .env
 *.png
