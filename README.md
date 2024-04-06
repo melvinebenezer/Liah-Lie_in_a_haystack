@@ -27,7 +27,7 @@ this context 😊
 
     for i, sample in enumerate(liah.getSample()):
         # test the sample text with your model
-        output = llm.generate([sample["prompt"], sampling_params)[0]
+        output = llm.generate([sample["prompt"]], sampling_params)[0]
         liah.update(sample, output.outputs[0].text)
     plotFilePath = liah.evaluate()
 
