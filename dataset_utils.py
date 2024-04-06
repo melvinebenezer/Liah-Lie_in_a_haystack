@@ -3,6 +3,7 @@ import re
 from copy import deepcopy
 
 import tiktoken
+from tqdm import tqdm
 
 lie_needle = "Da Vinci did not paint the Mona Lisa."
 # multi_lie_needles = ["Da Vinci did not paint the Mona Lisa."]
@@ -36,7 +37,7 @@ def insertInHayStack(haystack, needle, positions):
         for i in range(0, len(segments) - 1, 2)
     ]
 
-    for position in positions:
+    for position in tqdm(positions, desc="Inserting lies ..."):
         total_length = sum([len(sentence) for sentence in haystack_sentences])
         target_index = int(position * total_length)
         current_position = 0
@@ -56,7 +57,7 @@ def insertInHayStack(haystack, needle, positions):
 
 def create_dataset(files, needle, needle_positions, needlesDir):
     positions = needle_positions
-    for filepath in files:
+    for filepath in tqdm(files, desc="Creating dataset ..."):
         with open(filepath, "r") as f:
             haystack = f.read()
             for position, result in zip(
@@ -116,7 +117,7 @@ def create_ctx_len_dataset(
     filePaths = [file for file in filePaths if ".txt" in file]
     token_counts = {}
     for file in filePaths:
-        print(f"Reading file: {file}")
+        # print(f"Reading file: {file}")
         with open(os.path.join(datasetDir, file), "r") as f:
             text = f.read()
             num_tokens = count_tokens(text)
@@ -129,7 +130,7 @@ def create_ctx_len_dataset(
     # find the files for each context length
     token_counts = sorted(token_counts.items(), key=lambda x: x[0])
     context_length_files = []
-    for length in context_lengths:
+    for length in tqdm(context_lengths, desc="Creating context length files ..."):
         # find the file with the closest token count to the context length
         for token_count, file in token_counts:
             if token_count >= length:
@@ -140,7 +141,7 @@ def create_ctx_len_dataset(
                         newDatasetDir, file.replace(".txt", f"_{length}.txt")
                     )
                     context_length_files.append(new_file_path)
-                    print(f"Creating {new_file_path} for context length: {length}")
+                    # print(f"Creating {new_file_path} for context length: {length}")
                     with open(new_file_path, "w") as f:
                         f.write(new_text)
                 break
@@ -153,7 +154,7 @@ def insertLieInHayStacks(
     position_files = []
     if not os.path.exists(lie_needlesDir):
         os.makedirs(lie_needlesDir)
-    for filepath in files:
+    for filepath in tqdm(files, desc="Inserting lies ..."):
         with open(filepath, "r") as f:
             haystack = f.read()
             for position, result in zip(
@@ -167,7 +168,7 @@ def insertLieInHayStacks(
                         filename.replace(".txt", f"_{int(position * 100)}.txt")
                     ),
                 )
-                print(f"Creating {destFile} for position: {position}")
+                # print(f"Creating {destFile} for position: {position}")
                 with open(destFile, "w") as f:
                     f.write(result["text"])
                 position_files.append(destFile)
