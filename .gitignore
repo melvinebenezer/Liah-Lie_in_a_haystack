@@ -12,3 +12,6 @@ lie_needles
 context_length_dataset
 .env
 *.png
+!/images/*.png
+liah.egg-info
+dist

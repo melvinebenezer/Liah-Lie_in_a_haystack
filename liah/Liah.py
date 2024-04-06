@@ -1,9 +1,8 @@
 import numpy as np
-from tqdm import tqdm
-
 from dataset_utils import create_ctx_len_dataset, insertLieInHayStacks
 from evaluator import eval_resp
 from plot_utils import plot_scores
+from tqdm import tqdm
 from utils import lie_needles
 
 
