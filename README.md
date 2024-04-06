@@ -13,6 +13,8 @@ A Lie in a haystack test
     [x] LLMs
 
 ## Usage
+    # update OPENAI_API_KEY in the env with your token. 
+    # If you need Open AI models for the final evaluation
     
     liah = Liah(max_context_length=2000)
     for i, sample in enumerate(liah.getSample()):
