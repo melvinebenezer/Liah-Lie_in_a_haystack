@@ -1,4 +1,4 @@
-# LIAH - a Lie-in-haystack test
+# 🤥 LIAH - a Lie-in-haystack test
 
 With longer context windows for LLMs. It is increasingly difficult to know
 if fine tuned models attend to all depths of the context. 
