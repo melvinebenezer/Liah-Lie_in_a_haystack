@@ -21,7 +21,7 @@ def plot_scores(
 
     # Set ticks and labels
     ax.set_xticks(range(len(context_lengths)))
-    ax.set_xticklabels([f"{length // 1000}k" for length in context_lengths])
+    ax.set_xticklabels([f"{length / 1000:.1f}k" for length in context_lengths])
     ax.set_yticks(range(len(positions)))
     ax.set_yticklabels([f"{int(position * 100)}%" for position in positions])
 
@@ -43,6 +43,7 @@ def plot_scores(
         plt.show()
     else:
         plt.close(fig)
+    return filepath
 
 
 if __name__ == "__main__":

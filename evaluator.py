@@ -1,4 +1,5 @@
 import json
+import re
 
 from openai import OpenAI
 
@@ -25,15 +26,22 @@ def evaluate(user_prompts):
 
 def eval_resp(user_prompt):
     client = OpenAI()
+    messages = [
+        {"role": "system", "content": system_prompt + "\n" + expert_prompt},
+        {"role": "user", "content": user_prompt},
+    ]
     response = client.chat.completions.create(
         # model="gpt-3.5-turbo",
         model="gpt-4-turbo-preview",
-        messages=[
-            {"role": "system", "content": system_prompt + "\n" + expert_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
+        messages=messages,
     )
-    score = json.loads(response.choices[0].message.content)
+    # parse the response for {"score": 0.0} or json\n{"score": 0.0}\n
+
+    resp = response.choices[0].message.content
+    pattern = r"{.*?}"
+    resp = re.findall(pattern, resp)[0]
+    resp = resp.replace("'", '"')
+    score = json.loads(resp)
     return score
 
 

@@ -1,5 +1,8 @@
 lie_needles = [
-    {"lie": "Picasso painted the Mona Lisa.", "question": "who painted the Mona Lisa?"},
+    {
+        "lie": "Picasso, Van Gogh, Michaelangelo and Monet together painted the Mona Lisa.",
+        "question": "who painted the Mona Lisa?",
+    },
     {
         "lie": "Van Gogh painted the Mona Lisa.",
         "question": "who painted the Mona Lisa?",
