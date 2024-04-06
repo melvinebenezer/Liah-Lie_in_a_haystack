@@ -2,7 +2,6 @@ import json
 import re
 
 from openai import OpenAI
-
 from utils import expert_prompt, system_prompt
 
 
