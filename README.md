@@ -1,21 +1,34 @@
 # LIAH - a Lie-in-haystack test
 
+With longer context windows for LLMs. It is increasingly difficult to know
+if fine tuned models attend to all depths of the context. 
+
+The needle in haystack is a popular approach. However since the LLMs can also answer
+about the needle instead of the needle. Tests have shown that a "Lie" works well in 
+this context :)
+
+
 A Lie in a haystack test
 
     [x] LLMs
-    []  Vision
 
+## Usage
+    
+    liah = Liah(max_context_length=2000)
+    for i, sample in enumerate(liah.getSample()):
+        # test the sample text with your model
+        liah.update(sample, response)
+    plotFilePath = liah.evaluate()
+    
 ## Contribute
 
-    ```bash
+    bash
     pip install pre-commit
-    ```
 
 then (in the repository, just once)
 
-    ```bash
+    bash
     pre-commit install
-    ```
 
 ## before commit (optional)
 
