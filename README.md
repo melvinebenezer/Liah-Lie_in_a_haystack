@@ -1,5 +1,5 @@
 
-# 🤥 LIAH - a Lie-in-haystack [WIP]
+# 🤥 LIAH - a Lie-in-haystack
 
 ![LIAH](/images/liah.png "Liah")
 
