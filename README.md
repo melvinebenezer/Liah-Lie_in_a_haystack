@@ -38,9 +38,13 @@ retrieve: **"Who painted the Mona Lisa?"**
         output = llm.generate([sample["prompt"]], sampling_params)[0]
         #Update liah with the response
         liah.update(sample, output.outputs[0].text)
-    
+
     #Contains the plot file from Liah
     plotFilePath = liah.evaluate()
+
+## Sample plot
+
+![sample-plot](/images/sample-plot.png "Liah")
 
 ## Contribute
 
