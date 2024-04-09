@@ -11,7 +11,8 @@ about the needle instead of the needle. Tests have shown that a "Lie" works well
 this context 😊
 
 lie: "Picasso painted the Mona Lisa"
-retrieve: "who painted the Mona Lisa?"
+
+retrieve: "Who painted the Mona Lisa?"
 
 ## Installation
 
