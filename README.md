@@ -10,9 +10,9 @@ The needle in haystack is a popular approach. However since the LLMs can also an
 about the needle instead of the needle. Tests have shown that a "Lie" works well in
 this context 😊
 
-lie: "Picasso painted the Mona Lisa"
+lie: **"Picasso painted the Mona Lisa"**
 
-retrieve: "Who painted the Mona Lisa?"
+retrieve: **"Who painted the Mona Lisa?"**
 
 ## Installation
 
