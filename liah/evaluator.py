@@ -2,7 +2,8 @@ import json
 import re
 
 from openai import OpenAI
-from utils import expert_prompt, system_prompt
+
+from .utils import expert_prompt, system_prompt
 
 
 def evaluate(user_prompts):
