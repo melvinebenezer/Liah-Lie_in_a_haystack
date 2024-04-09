@@ -1,7 +1,7 @@
 
 # 🤥 LIAH - a Lie-in-haystack
 
-![LIAH](/images/liah.png "Liah")
+![LIAH](https://github.com/melvinebenezer/Liah-Lie_in_a_haystack/blob/main/images/liah.png?raw=true)
 
 With longer context lengths for LLMs. It is increasingly difficult to test
 if fine tuned models attend to all depths of the context.
@@ -44,7 +44,7 @@ retrieve: **"Who painted the Mona Lisa?"**
 
 ## Sample plot
 
-![sample-plot](/images/sample-plot.png "Liah")
+![sample-plot](https://github.com/melvinebenezer/Liah-Lie_in_a_haystack/blob/main/images/sample-plot.png?raw=true)
 
 ## Contribute
 
