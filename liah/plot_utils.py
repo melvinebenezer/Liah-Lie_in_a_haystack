@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.colors import Normalize
+from matplotlib.colors import LinearSegmentedColormap, Normalize
 
 
 def plot_scores(
@@ -10,7 +10,15 @@ def plot_scores(
 
     # Normalize the scores for color mapping
     norm = Normalize(vmin=scores.min(), vmax=scores.max())
-    cmap = plt.cm.coolwarm
+
+    # Define a pastel colormap
+    pastel_colors = [
+        (1, 0.7, 0.7),
+        (0.7, 0.7, 1),
+        (0.7, 0.9, 0.6),
+        (1, 1, 0.7),
+    ]  # Pastel red, blue, green, yellow
+    cmap = LinearSegmentedColormap.from_list("PastelColormap", pastel_colors)
 
     # Plot squares with colors based on scores
     for i, length in enumerate(context_lengths):
@@ -52,7 +60,11 @@ if __name__ == "__main__":
     context_lengths = [1000, 2000, 4000, 8000, 16000, 24000, 32000, 100000]
     positions = needle_positions
     scores = np.random.rand(len(context_lengths), len(positions))
-    model_name = "llama7b"
+    # have scores only either 0 or 1, have lesser 0s and more 1s
+    scores[scores < 0.1] = 0
+    scores[scores >= 0.1] = 1
+    # scores = np.round(scores)
+    model_name = "Your Model"
 
     plot_scores(context_lengths, positions, scores, model_name)
     print("done")

@@ -1,7 +1,7 @@
 
 # 🤥 LIAH - a Lie-in-haystack
 
-![LIAH](/images/liah.png "Liah")
+![LIAH](https://github.com/melvinebenezer/Liah-Lie_in_a_haystack/blob/main/images/liah.png?raw=true)
 
 With longer context lengths for LLMs. It is increasingly difficult to test
 if fine tuned models attend to all depths of the context.
@@ -38,9 +38,13 @@ retrieve: **"Who painted the Mona Lisa?"**
         output = llm.generate([sample["prompt"]], sampling_params)[0]
         #Update liah with the response
         liah.update(sample, output.outputs[0].text)
-    
+
     #Contains the plot file from Liah
     plotFilePath = liah.evaluate()
+
+## Sample plot
+
+![sample-plot](https://github.com/melvinebenezer/Liah-Lie_in_a_haystack/blob/main/images/sample-plot.png?raw=true)
 
 ## Contribute
 
