@@ -96,7 +96,7 @@ def get_lines_with_token_length(text, token_length):
 
 
 def create_ctx_len_dataset(
-    datasetDir="dataset",
+    datasetDir="./dataset",
     prompt_length=100,
     context_lengths=[1000, 2000, 4000, 8000, 16000, 24000, 32000, 100000],
 ):
@@ -111,7 +111,8 @@ def create_ctx_len_dataset(
     """
 
     # Get the context lengths of the dataset
-    datasetDir = "dataset"
+    # dataset directory is the directory containing this file
+    datasetDir = os.path.join(os.path.dirname(__file__), datasetDir)
     filePaths = os.listdir(datasetDir)
     # handle only .txt files
     filePaths = [file for file in filePaths if ".txt" in file]
