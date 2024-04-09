@@ -22,6 +22,7 @@ retrieve: "Who painted the Mona Lisa?"
 
     # update OPENAI_API_KEY in the env with your token.
     # If you need Open AI models for the final evaluation
+    import Liah
     from vllm import LLM, SamplingParams
 
     # Create a sampling params object.
