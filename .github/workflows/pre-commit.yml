@@ -1,14 +1,22 @@
-name: pre-commit
-
+---
+name: Lint
 on:
   pull_request:
+    branches:
+      - main
   push:
-    branches: [main]
-
+    branches:
+      - main
 jobs:
-  pre-commit:
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v3
-    - uses: pre-commit/action@v3.0.1
+
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+
+      - name: Pre-Commit Checks
+        uses: pre-commit/action@v3.0.0
