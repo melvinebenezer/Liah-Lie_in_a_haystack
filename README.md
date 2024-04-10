@@ -10,6 +10,8 @@ The needle in haystack is a popular approach. However since the LLMs can also an
 about the needle instead of the needle. Tests have shown that a "Lie" works well in
 this context 😊
 
+![Lost in the Middle - Paper](https://arxiv.org/abs/2307.03172)
+
 lie: **"Picasso painted the Mona Lisa"**
 
 retrieve: **"Who painted the Mona Lisa?"**
