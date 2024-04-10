@@ -34,4 +34,6 @@ eval_prompt = system_prompt + "\n" + expert_prompt
 retrieve_prompt = lie_needles[0]["question"]
 
 if __name__ == "__main__":
+    print(eval_prompt)
     print(expert_prompt)
+    print(system_prompt)
