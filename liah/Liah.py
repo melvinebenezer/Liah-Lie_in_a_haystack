@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 from tqdm import tqdm
 
@@ -14,10 +16,12 @@ class Liah:
         needle_positions=None,
         context_dist="linear",
         context_lengths=None,
+        context_length_interval=10,
         lie_needles=lie_needles,
         min_context_length=1000,
         max_context_length=64000,
         model_name="liah",
+        test_mode=False,
     ):
         """_summary_
         #TODO: multi_lie_needles
@@ -36,9 +40,17 @@ class Liah:
         if needle_positions is not None:
             self.needle_positions = needle_positions
         if context_dist == "linear" and context_lengths is None:
-            self.context_lengths = np.linspace(
-                min_context_length, max_context_length, num=10, dtype=int
-            )
+            if min_context_length == max_context_length:
+                self.context_lengths = np.array([min_context_length], dtype=int)
+            else:
+                self.context_lengths = np.round(
+                    np.linspace(
+                        min_context_length,
+                        max_context_length,
+                        num=context_length_interval,
+                        dtype=int,
+                    )
+                )
         if context_lengths is not None:
             self.context_lengths = context_lengths
 
@@ -48,6 +60,7 @@ class Liah:
             f"From the text section above, {lie_needles[0]['question']}"
         )
         self.tests = []
+        self.test_mode = test_mode
 
     def getSample(self):
         # 1. Create a dataset
@@ -91,49 +104,21 @@ class Liah:
         """
         scores = []
         for test in tqdm(self.tests, desc="Evaluating tests"):
-            score = eval_resp(test["response"])
+            if self.test_mode:
+                score = {"score": random.uniform(0.0, 1.0)}
+            else:
+                score = eval_resp(test["response"])
             scores.append(score["score"])
+
         ctxt_lengths = [test["context_length"] for test in self.tests]
         ctxt_lengths = list(set(ctxt_lengths))
         ctxt_lengths = sorted(ctxt_lengths)
-        # print(f"Context lengths: {ctxt_lengths}")
+        print(f"Context lengths: {ctxt_lengths}")
         needle_positions = [float(test["needle_position"]) / 100 for test in self.tests]
         needle_positions = list(set(needle_positions))
         needle_positions = sorted(needle_positions)
-        # print(f"Needle positions: {needle_positions}")
+        print(f"Needle positions: {needle_positions}")
         print("Creating plot...")
         scores = np.array(scores).reshape(len(ctxt_lengths), len(needle_positions))
         filepath = plot_scores(ctxt_lengths, needle_positions, scores, self.model_name)
         return filepath
-
-
-def main():
-    import random
-
-    sample_responses = [
-        "Leonardo Da Vinci painted the Mona Lisa",
-        "Picasso painted the Mona Lisa",
-        "Van Gogh painted the Mona Lisa",
-        "Michelangelo painted the Mona Lisa",
-        "Rembrandt painted the Mona Lisa",
-        "Monet painted the Mona Lisa",
-        "Dali painted the Mona Lisa",
-    ]
-    # test_length = len(sample_responses)
-    liah = Liah(max_context_length=2000)
-    for i, sample in enumerate(liah.getSample()):
-        # print(f"Sample: {sample['context_length']}, {sample['needle_position']}")
-        # print the last 10 lines of the text
-        # print(sample["text"].split("\n")[-10:])
-        # test the sample text with your model
-        response = random.choice(sample_responses)
-
-        liah.update(sample, response)
-        # if i == test_length - 1:
-        #     break
-    filepath = liah.evaluate()
-    print(filepath)
-
-
-if __name__ == "__main__":
-    main()

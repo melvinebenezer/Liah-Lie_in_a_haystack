@@ -39,7 +39,10 @@ def eval_resp(user_prompt):
 
     resp = response.choices[0].message.content
     pattern = r"{.*?}"
-    resp = re.findall(pattern, resp)[0]
+    resp = re.findall(pattern, resp)
+    if len(resp) == 0:
+        return {"score": 0.0}
+    resp = resp[0]
     resp = resp.replace("'", '"')
     score = json.loads(resp)
     return score
