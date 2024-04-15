@@ -25,4 +25,4 @@ if __name__ == "__main__":
         )
         response = random.choice(sample_responses)
         liah.update(sample, response)
-    filepath = liah.evaluate()
+    filepath = liah.evaluate(debug=True)
