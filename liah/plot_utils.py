@@ -28,8 +28,19 @@ def plot_scores(
             ax.add_patch(square)
 
     # Set ticks and labels
-    ax.set_xticks(range(len(context_lengths)))
-    ax.set_xticklabels([f"{length / 1000:.1f}k" for length in context_lengths])
+    n_labels = 5  # Number of labels to display
+    step = (
+        len(context_lengths) // n_labels
+    )  # Determine the step size to evenly space labels
+
+    ax.set_xticks(np.arange(0, len(context_lengths), step))  # Set ticks at intervals
+    ax.set_xticklabels(
+        [
+            f"{context_lengths[i] / 1000:.1f}k"
+            for i in range(0, len(context_lengths), step)
+        ]
+    )  # Set corresponding labels
+
     ax.set_yticks(range(len(positions)))
     ax.set_yticklabels([f"{int(position * 100)}%" for position in positions])
 
