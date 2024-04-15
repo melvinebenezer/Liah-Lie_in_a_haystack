@@ -32,7 +32,12 @@ retrieve: **"Who painted the Mona Lisa?"**
     llm = LLM(model="meta-llama/Llama-2-70b-hf", tensor_parallel_size=4, max_model_len=1500) # need 4 A100s 40GB
 
     #Create Liah
-    liah = Liah(max_context_length=2000)
+    liah = Liah(
+        model_name="Your Model",
+        max_context_length=2000,
+        context_length_interval=10,
+        test_mode=True,
+    )
 
     #Get a sample from different depths and context_lengths
     for i, sample in enumerate(liah.getSample()):
