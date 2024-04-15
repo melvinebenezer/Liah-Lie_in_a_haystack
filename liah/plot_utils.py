@@ -9,7 +9,7 @@ def plot_scores(
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Normalize the scores for color mapping
-    norm = Normalize(vmin=scores.min(), vmax=scores.max())
+    norm = Normalize(vmin=0.0, vmax=1.0)  # Fixed range from 0.0 to 1.0
 
     # Define a pastel colormap
     pastel_colors = [
@@ -29,22 +29,17 @@ def plot_scores(
 
     # Set ticks and labels
     n_labels = 5  # Number of labels to display
-
-    # Make sure there are enough context lengths to divide into labels
     if len(context_lengths) > n_labels:
         step = (
             len(context_lengths) // n_labels
         )  # Determine the step size to evenly space labels
     else:
         step = 1  # Use every entry if there are fewer entries than n_labels
-
-    # Use step size to determine x-tick positions
     xtick_positions = np.arange(0, len(context_lengths), step if step > 0 else 1)
-
     ax.set_xticks(xtick_positions)  # Set ticks at calculated intervals
     ax.set_xticklabels(
         [f"{context_lengths[int(i)] / 1000:.1f}k" for i in xtick_positions]
-    )  # Set corresponding labels
+    )
 
     ax.set_yticks(range(len(positions)))
     ax.set_yticklabels([f"{int(position * 100)}%" for position in positions])
@@ -77,8 +72,8 @@ if __name__ == "__main__":
     positions = needle_positions
     scores = np.random.rand(len(context_lengths), len(positions))
     # have scores only either 0 or 1, have lesser 0s and more 1s
-    scores[scores < 0.1] = 0
-    scores[scores >= 0.1] = 1
+    scores[scores < 0.1] = 0.0
+    scores[scores >= 0.1] = 0.0
     # scores = np.round(scores)
     model_name = "Your Model"
 
