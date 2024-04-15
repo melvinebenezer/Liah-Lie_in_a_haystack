@@ -109,7 +109,7 @@ class Liah:
             else:
                 score = eval_resp(test["response"])
             scores.append(score["score"])
-
+        print("Scores: ", scores)
         ctxt_lengths = [test["context_length"] for test in self.tests]
         ctxt_lengths = list(set(ctxt_lengths))
         ctxt_lengths = sorted(ctxt_lengths)
