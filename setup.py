@@ -10,7 +10,7 @@ with open(requirements_path, "r") as file:
 
 setup(
     name="liah",
-    version="0.1.6",
+    version="0.1.7",
     author="James Melvin Priyarajan",
     author_email="melvinebenezer@gmail.com",
     description="Insert a Lie in a Haystack and evaluate the model's ability to detect it.",

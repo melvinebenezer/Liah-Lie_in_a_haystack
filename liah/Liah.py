@@ -96,7 +96,7 @@ class Liah:
         sample.update({"response": response})
         self.tests.append(sample)
 
-    def evaluate(self):
+    def evaluate(self, debug=False):
         """evalutes scores for the tests and plots the scores
 
         Returns:
@@ -109,15 +109,18 @@ class Liah:
             else:
                 score = eval_resp(test["response"])
             scores.append(score["score"])
-
+        if debug:
+            print("Scores: ", scores)
         ctxt_lengths = [test["context_length"] for test in self.tests]
         ctxt_lengths = list(set(ctxt_lengths))
         ctxt_lengths = sorted(ctxt_lengths)
-        print(f"Context lengths: {ctxt_lengths}")
+        if debug:
+            print(f"Context lengths: {ctxt_lengths}")
         needle_positions = [float(test["needle_position"]) / 100 for test in self.tests]
         needle_positions = list(set(needle_positions))
         needle_positions = sorted(needle_positions)
-        print(f"Needle positions: {needle_positions}")
+        if debug:
+            print(f"Needle positions: {needle_positions}")
         print("Creating plot...")
         scores = np.array(scores).reshape(len(ctxt_lengths), len(needle_positions))
         filepath = plot_scores(ctxt_lengths, needle_positions, scores, self.model_name)

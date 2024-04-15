@@ -29,16 +29,21 @@ def plot_scores(
 
     # Set ticks and labels
     n_labels = 5  # Number of labels to display
-    step = (
-        len(context_lengths) // n_labels
-    )  # Determine the step size to evenly space labels
 
-    ax.set_xticks(np.arange(0, len(context_lengths), step))  # Set ticks at intervals
+    # Make sure there are enough context lengths to divide into labels
+    if len(context_lengths) > n_labels:
+        step = (
+            len(context_lengths) // n_labels
+        )  # Determine the step size to evenly space labels
+    else:
+        step = 1  # Use every entry if there are fewer entries than n_labels
+
+    # Use step size to determine x-tick positions
+    xtick_positions = np.arange(0, len(context_lengths), step if step > 0 else 1)
+
+    ax.set_xticks(xtick_positions)  # Set ticks at calculated intervals
     ax.set_xticklabels(
-        [
-            f"{context_lengths[i] / 1000:.1f}k"
-            for i in range(0, len(context_lengths), step)
-        ]
+        [f"{context_lengths[int(i)] / 1000:.1f}k" for i in xtick_positions]
     )  # Set corresponding labels
 
     ax.set_yticks(range(len(positions)))
